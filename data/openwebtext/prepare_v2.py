@@ -9,9 +9,11 @@ num_proc = 8
 enc = tiktoken.get_encoding("gpt2")
 
 if __name__ == '__main__':
-    # Use the Parquet-based version (no loading script needed)
-    # This is Skylion007/openwebtext which is a mirror in Parquet format
-    dataset = load_dataset("Skylion007/openwebtext", split="train")
+    # Load directly from parquet files to avoid loading script issues
+    # Using the parquet files from HuggingFace hub directly
+    dataset = load_dataset("parquet", data_files={
+        "train": "hf://datasets/Skylion007/openwebtext/openwebtext_*.parquet"
+    })["train"]
     
     # Create train/val split
     split_dataset = dataset.train_test_split(test_size=0.0005, seed=2357, shuffle=True)
